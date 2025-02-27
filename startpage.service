@@ -1,0 +1,16 @@
+# /etc/systemd/system/startpage.service
+
+[Unit]
+Description=Startpage
+#After=network.target
+
+[Service]
+Type=simple
+ExecStart=/opt/startpage/sp.exe
+Restart=always
+RestartSec=1
+User=dector
+Group=dector
+
+[Install]
+WantedBy=multi-user.target
