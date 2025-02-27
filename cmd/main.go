@@ -10,6 +10,7 @@ package main
 import (
 	"embed"
 	"net/http"
+	"os"
 )
 
 //go:embed assets/*
@@ -20,5 +21,21 @@ func main() {
 		file, _ := assets.ReadFile("assets/index.html")
 		w.Write(file)
 	})
-	http.ListenAndServe(":1111", nil)
+	http.HandleFunc("POST /search", func(w http.ResponseWriter, r *http.Request) {
+		query := r.FormValue("q")
+		w.Header().Set("Referrer-Policy", "no-referrer")
+		http.Redirect(w, r, "https://www.google.com/search?q="+query, http.StatusFound)
+	})
+
+	http.ListenAndServe(port(), nil)
+}
+
+func port() string {
+	if os.Getenv("PORT") != "" {
+		return ":" + os.Getenv("PORT")
+	}
+	if os.Getenv("DEV") != "" {
+		return ":1110"
+	}
+	return ":1111"
 }

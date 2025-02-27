@@ -15,9 +15,45 @@
                 margin: 0; /* Remove default body margin */
                 font-family: "Inter", sans-serif;
             }
+            main {
+                width: 50%;
+                margin: 0 auto;
+                padding: 20px;
+                background-color: #2f2f2f;
+                border-radius: 10px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            }
+            #search {
+                background: transparent;
+                //border: #5f745f solid 1px;
+                border: none;
+                border-radius: 5px;
+                width: 100%;
+                color: darkgray;
+                font-size: 1.5rem;
+                text-align: center;
+            }
+            :focus {
+                outline: none;
+                border-color: none;
+                box-shadow: none;
+            }
+            ::placeholder {
+                color: #5f745f;
+            }
         </style>
     </head>
     <body>
-        <h1>:)</h1>
+        <main>
+            <!-- <h1>:)</h1> -->
+            <form method="POST" action="/search">
+                <input
+                    id="search"
+                    type="text"
+                    name="q"
+                    placeholder="Search..."
+                />
+            </form>
+        </main>
     </body>
 </html>

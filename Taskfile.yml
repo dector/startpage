@@ -1,0 +1,11 @@
+version: "3"
+
+tasks:
+  dev:
+    cmds:
+      - DEV=1 air
+    silent: true
+  build:
+    cmds:
+      - go build -o bin/sp.exe cmd/main.go
+    silent: true
