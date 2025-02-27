@@ -9,3 +9,10 @@ tasks:
     cmds:
       - go build -o bin/sp.exe cmd/main.go
     silent: true
+  deploy:
+    deps:
+      - build
+    cmds:
+      - cp bin/sp.exe /opt/startpage/bin/sp.exe
+      - systemctl restart startpage
+    silent: true
