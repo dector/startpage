@@ -13,6 +13,7 @@ tasks:
     deps:
       - build
     cmds:
+      - systemctl stop startpage
       - cp bin/sp.exe /opt/startpage/bin/sp.exe
       - systemctl restart startpage
     silent: true
