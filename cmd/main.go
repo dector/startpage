@@ -21,6 +21,11 @@ func main() {
 		file, _ := assets.ReadFile("assets/index.html")
 		w.Write(file)
 	})
+	http.HandleFunc("/favicon.svg", func(w http.ResponseWriter, r *http.Request) {
+		file, _ := assets.ReadFile("assets/favicon.svg")
+		w.Header().Set("Content-Type", "image/svg+xml")
+		w.Write(file)
+	})
 	http.HandleFunc("POST /search", func(w http.ResponseWriter, r *http.Request) {
 		query := r.FormValue("q")
 		w.Header().Set("Referrer-Policy", "no-referrer")
