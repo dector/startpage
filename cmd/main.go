@@ -9,8 +9,11 @@ package main
 
 import (
 	"embed"
+	"fmt"
 	"net/http"
+	"net/url"
 	"os"
+	"strings"
 )
 
 //go:embed assets/*
@@ -27,12 +30,26 @@ func main() {
 		w.Write(file)
 	})
 	http.HandleFunc("POST /search", func(w http.ResponseWriter, r *http.Request) {
-		query := r.FormValue("q")
+		query := strings.TrimSpace(r.FormValue("q"))
+
+		redirectUrl := ""
+
+		if IsUrl(query) {
+			redirectUrl = query
+		} else if query == "mail" {
+			redirectUrl = "https://gmail.com"
+		} else {
+			redirectUrl = "https://www.google.com/search?q=" + query
+		}
+
 		w.Header().Set("Referrer-Policy", "no-referrer")
-		http.Redirect(w, r, "https://www.google.com/search?q="+query, http.StatusFound)
+		http.Redirect(w, r, redirectUrl, http.StatusFound)
 	})
 
-	http.ListenAndServe(port(), nil)
+	port := port()
+
+	fmt.Printf("Started on port %s\n", port)
+	http.ListenAndServe(port, nil)
 }
 
 func port() string {
@@ -43,4 +60,9 @@ func port() string {
 		return ":1110"
 	}
 	return ":1111"
+}
+
+func IsUrl(s string) bool {
+	_, err := url.Parse(s)
+	return err == nil
 }
