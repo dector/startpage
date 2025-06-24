@@ -4,9 +4,18 @@ tasks:
   default:
     cmds:
       - task --list-all
-  dev:
+  gen:
     cmds:
-      - DEV=1 air
+      - templ generate
+  dev:
+    env:
+      DEV: 1
+    cmds:
+      - |
+        templ generate --watch \
+          --open-browser=false \
+          --proxy="http://localhost:1110" --proxyport=1112 \
+          --cmd="go run cmd/main.go"
     silent: true
   build:
     cmds:

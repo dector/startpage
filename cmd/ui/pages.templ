@@ -1,0 +1,81 @@
+package ui
+
+import "github.com/dector/startpage/internal"
+
+templ IndexPage(cfg internal.Config) {
+	<!doctype html>
+	<html lang="en">
+	    <head>
+	        <meta charset="UTF-8" />
+	        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+	        <title>Startpage</title>
+	        <style>
+	            body {
+	                background-color: #1f1f1f; /* Dark background */
+	                color: #5f745f; /* Text color */
+	                display: flex;
+	                justify-content: center; /* Horizontal center */
+	                align-items: center; /* Vertical center */
+	                height: 100vh; /* Make body take full viewport height */
+	                margin: 0; /* Remove default body margin */
+	                font-family: "Inter", sans-serif;
+	            }
+	            main {
+	                width: 50%;
+	                margin: 0 auto;
+	                padding: 20px;
+	                background-color: #2f2f2f;
+	                border-radius: 10px;
+	                box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+	            }
+	            #search {
+	                background: transparent;
+	                //border: #5f745f solid 1px;
+	                border: none;
+	                border-radius: 5px;
+	                width: 100%;
+	                color: darkgray;
+	                font-size: 1.5rem;
+	                text-align: center;
+	            }
+				#footer {
+					color: gray;
+					opacity: 0.5;
+					position: absolute;
+					bottom: 0;
+					left: 0;
+					width: 100%;
+					text-align: center;
+					padding: 10px 0;
+				}
+				#footer:hover {
+					opacity: 1;
+				}
+	            :focus {
+	                outline: none;
+	                border-color: none;
+	                box-shadow: none;
+	            }
+	            ::placeholder {
+	                color: #5f745f;
+	            }
+	        </style>
+	    </head>
+	    <body>
+	        <main>
+	            <!-- <h1>:)</h1> -->
+	            <form method="POST" action="/search">
+	                <input
+	                    id="search"
+	                    type="text"
+	                    name="q"
+	                    placeholder="Search..."
+	                    autofocus
+	                />
+	            </form>
+	        </main>
+			<div id="footer">v { cfg.Version }</div>
+	    </body>
+	</html>
+}

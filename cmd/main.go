@@ -14,15 +14,21 @@ import (
 	"net/url"
 	"os"
 	"strings"
+
+	"github.com/dector/startpage/cmd/ui"
+	"github.com/dector/startpage/internal"
 )
 
 //go:embed assets/*
 var assets embed.FS
 
 func main() {
+	config := internal.Config{
+		Version: "1.1.0",
+	}
+
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		file, _ := assets.ReadFile("assets/index.html")
-		w.Write(file)
+		ui.IndexPage(config).Render(r.Context(), w)
 	})
 	http.HandleFunc("/favicon.svg", func(w http.ResponseWriter, r *http.Request) {
 		file, _ := assets.ReadFile("assets/favicon.svg")
