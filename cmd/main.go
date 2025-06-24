@@ -63,6 +63,7 @@ func port() string {
 }
 
 func IsUrl(s string) bool {
-	_, err := url.Parse(s)
-	return err == nil
+	url, _ := url.Parse(s)
+
+	return url.Scheme != ""
 }
