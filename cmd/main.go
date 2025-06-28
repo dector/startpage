@@ -44,6 +44,10 @@ func main() {
 			redirectUrl = query
 		} else if query == "mail" {
 			redirectUrl = "https://gmail.com"
+		} else if query == "chat" {
+			redirectUrl = "https://chatgpt.com"
+		} else if query == "yt" {
+			redirectUrl = "https://youtube.com"
 		} else {
 			redirectUrl = "https://www.google.com/search?q=" + query
 		}
