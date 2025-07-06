@@ -42,7 +42,7 @@ func main() {
 
 		if IsUrl(query) {
 			redirectUrl = query
-		} else if query == "mail" {
+		} else if query == "mail" || query == "gmail" {
 			redirectUrl = "https://gmail.com"
 		} else if query == "chat" {
 			redirectUrl = "https://chatgpt.com"
