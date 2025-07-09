@@ -31,6 +31,9 @@ func main() {
 
 		redirectUrl := ""
 
+		// quick workaround - load mapping every time
+		config, _ := internal.LoadConfig()
+
 		if IsUrl(query) {
 			redirectUrl = query
 		} else if url, exists := config.Redirects[query]; exists {
