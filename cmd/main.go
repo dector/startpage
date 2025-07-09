@@ -1,12 +1,5 @@
 package main
 
-// TODO
-// 1. Display search bar
-// 2. When user doing search - redirect to the Google page
-// 3. Add tailwind
-// 4. Make page nicer
-// 5. Display version in the bottom
-
 import (
 	"embed"
 	"fmt"
@@ -23,12 +16,10 @@ import (
 var assets embed.FS
 
 func main() {
-	config := internal.Config{
-		Version: "1.1.0",
-	}
+	config, _ := internal.LoadConfig()
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		ui.IndexPage(config).Render(r.Context(), w)
+		ui.IndexPage(*config).Render(r.Context(), w)
 	})
 	http.HandleFunc("/favicon.svg", func(w http.ResponseWriter, r *http.Request) {
 		file, _ := assets.ReadFile("assets/favicon.svg")
@@ -42,14 +33,8 @@ func main() {
 
 		if IsUrl(query) {
 			redirectUrl = query
-		} else if query == "mail" || query == "gmail" {
-			redirectUrl = "https://gmail.com"
-		} else if query == "chat" {
-			redirectUrl = "https://chatgpt.com"
-		} else if query == "chatc" || query == "claude" {
-			redirectUrl = "https://claude.ai"
-		} else if query == "yt" {
-			redirectUrl = "https://youtube.com"
+		} else if url, exists := config.Redirects[query]; exists {
+			redirectUrl = url
 		} else {
 			redirectUrl = "https://www.google.com/search?q=" + query
 		}
