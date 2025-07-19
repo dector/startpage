@@ -15,6 +15,7 @@ templ IndexPage(cfg internal.Config) {
 	                background-color: #1f1f1f; /* Dark background */
 	                color: #5f745f; /* Text color */
 	                display: flex;
+	                flex-direction: column;
 	                justify-content: center; /* Horizontal center */
 	                align-items: center; /* Vertical center */
 	                height: 100vh; /* Make body take full viewport height */
@@ -75,6 +76,9 @@ templ IndexPage(cfg internal.Config) {
 	                />
 	            </form>
 	        </main>
+	        <div style="text-align: right; margin-top: 20px; font-size: 0.8rem; width: 50%;">
+	            <a href="http://localhost:30101" style="color: gray; text-decoration: none; transition: color 0.3s;" onmouseover="this.style.color='orange'" onmouseout="this.style.color='gray'">Dashboard</a>
+	        </div>
 			<div id="footer">v { cfg.Version }</div>
 	    </body>
 	</html>
