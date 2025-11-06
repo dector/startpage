@@ -20,7 +20,7 @@ tasks:
         fi
     silent: true
 
-  all:
+  service:
     description: "Setup systemd service"
     cmds:
       - |

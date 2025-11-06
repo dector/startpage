@@ -28,5 +28,5 @@ tasks:
     deps:
       - build
     cmds:
-      - task: deploy:all
+      - task: deploy:config deploy:service
     silent: true
