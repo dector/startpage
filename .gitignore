@@ -1,5 +1,8 @@
+# For Claude
+.git/
+.jj/
+
 bin/
 tmp/
 
 /config.yml
-
