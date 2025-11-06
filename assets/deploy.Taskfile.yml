@@ -1,7 +1,27 @@
 version: "3"
 
 tasks:
+  config:
+    description: "Setup sample config"
+    cmds:
+      - |
+        CONFIG_DIR="$HOME/.config/startpage"
+        CONFIG_FILE="$CONFIG_DIR/config.yml"
+        SAMPLE_CONFIG="./assets/sample.config.yml"
+
+        # Check if config exists
+        if [ -f "$CONFIG_FILE" ]; then
+          echo "Config file already exists at $CONFIG_FILE. Skipping..."
+        else
+          echo "Config file not found, creating from sample..."
+          mkdir -p "$CONFIG_DIR"
+          cp "$SAMPLE_CONFIG" "$CONFIG_FILE"
+          echo "Config file created at $CONFIG_FILE"
+        fi
+    silent: true
+
   all:
+    description: "Setup systemd service"
     cmds:
       - |
         SERVICE_SRC="./assets/startpage.service"
