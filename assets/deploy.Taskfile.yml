@@ -1,0 +1,56 @@
+version: "3"
+
+tasks:
+  all:
+    cmds:
+      - |
+        SERVICE_SRC="./assets/startpage.service"
+        SERVICE_DST="$HOME/.config/systemd/user/startpage.service"
+        BINARY_SRC="bin/startpage"
+        BINARY_DST="$HOME/.local/bin/startpage"
+
+        # Ensure destination directories exist
+        mkdir -p "$HOME/.config/systemd/user"
+        mkdir -p "$HOME/.local/bin"
+
+        # Check if service file needs updating
+        SERVICE_CHANGED=false
+        if [ ! -f "$SERVICE_DST" ]; then
+          echo "Service file doesn't exist, will copy..."
+          SERVICE_CHANGED=true
+        elif ! cmp -s "$SERVICE_SRC" "$SERVICE_DST"; then
+          echo "Service file has changed, will update..."
+          SERVICE_CHANGED=true
+        else
+          echo "Service file unchanged, skipping copy..."
+        fi
+
+        # Copy service file if needed
+        if [ "$SERVICE_CHANGED" = true ]; then
+          cp "$SERVICE_SRC" "$SERVICE_DST"
+        fi
+
+        # Stop service
+        if systemctl --user is-enabled startpage.service &>/dev/null; then
+          systemctl --user stop startpage || true
+        fi
+
+        # Copy binary
+        cp "$BINARY_SRC" "$BINARY_DST"
+        chmod +x "$BINARY_DST"
+
+        # Handle systemd operations
+        if [ "$SERVICE_CHANGED" = true ]; then
+          echo "Reloading configuration..."
+          systemctl --user daemon-reload
+        fi
+        if systemctl --user is-enabled startpage.service &>/dev/null; then
+          echo "Restarting service..."
+          systemctl --user restart startpage
+        else
+          echo "Service not enabled, setting up..."
+          systemctl --user enable --now startpage
+        fi
+
+        echo "Deploy DONE!"
+    silent: true

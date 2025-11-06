@@ -1,5 +1,8 @@
 version: "3"
 
+includes:
+  deploy: assets/deploy.Taskfile.yml
+
 tasks:
   default:
     cmds:
@@ -21,16 +24,9 @@ tasks:
     cmds:
       - go build -o bin/startpage cmd/main.go
     silent: true
-
-  deploy:init:
-    cmds:
-      - sudo cp startpage.service /etc/systemd/user/
-      - systemctl --user daemon-reload
-      - systemctl --user enable startpage
-      - task deploy
   deploy:
     deps:
       - build
     cmds:
-      - sudo cp bin/startpage /usr/local/bin/startpage
-      - systemctl --user restart startpage
+      - task: deploy:all
+    silent: true
