@@ -19,13 +19,18 @@ tasks:
     silent: true
   build:
     cmds:
-      - go build -o bin/sp.exe cmd/main.go
+      - go build -o bin/startpage cmd/main.go
     silent: true
+
+  deploy:init:
+    cmds:
+      - sudo cp startpage.service /etc/systemd/user/
+      - systemctl --user daemon-reload
+      - systemctl --user enable startpage
+      - task deploy
   deploy:
     deps:
       - build
     cmds:
-      - systemctl stop startpage
-      - cp bin/sp.exe /opt/startpage/bin/sp.exe
-      - systemctl restart startpage
-    silent: true
+      - sudo cp bin/startpage /usr/local/bin/startpage
+      - systemctl --user restart startpage

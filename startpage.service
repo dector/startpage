@@ -6,11 +6,11 @@ Description=Startpage
 
 [Service]
 Type=simple
-ExecStart=/opt/startpage/sp.exe
+ExecStart=/usr/local/bin/startpage
 Restart=always
 RestartSec=1
-User=dector
-Group=dector
+#User=dector
+#Group=dector
 
 [Install]
 WantedBy=multi-user.target
