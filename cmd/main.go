@@ -31,10 +31,10 @@ func main() {
 
 		redirectUrl := ""
 
-		// quick workaround - load mapping every time
-		config, _ := internal.LoadConfig()
-
-		if IsUrl(query) {
+		if query == "/reload" {
+			config, _ = internal.LoadConfig()
+			redirectUrl = "/"
+		} else if IsUrl(query) {
 			redirectUrl = query
 		} else if url, exists := config.Redirects[query]; exists {
 			redirectUrl = url
