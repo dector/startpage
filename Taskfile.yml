@@ -9,13 +9,13 @@ tasks:
       - task --list-all
   gen:
     cmds:
-      - templ generate
+      - go tool templ generate
   dev:
     env:
       DEV: 1
     cmds:
       - |
-        templ generate --watch \
+        go tool templ generate --watch \
           --open-browser=false \
           --proxy="http://localhost:1110" --proxyport=1112 \
           --cmd="go run cmd/main.go"
