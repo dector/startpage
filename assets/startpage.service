@@ -2,7 +2,7 @@
 
 [Unit]
 Description=Startpage daemon
-#After=network.target
+After=default.target
 
 [Service]
 Type=simple
