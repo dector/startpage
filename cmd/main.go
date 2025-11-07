@@ -68,7 +68,8 @@ func port() string {
 }
 
 func IsUrl(s string) bool {
-	url, _ := url.Parse(s)
+	parsedUrl, _ := url.Parse(s)
 
-	return url.Scheme != ""
+	scheme := strings.ToLower(parsedUrl.Scheme)
+	return scheme == "http" || scheme == "https"
 }
