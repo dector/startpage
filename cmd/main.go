@@ -21,6 +21,9 @@ func main() {
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		ui.IndexPage(*config).Render(r.Context(), w)
 	})
+	http.HandleFunc("/help", func(w http.ResponseWriter, r *http.Request) {
+		ui.HelpPage(*config).Render(r.Context(), w)
+	})
 	http.HandleFunc("/favicon.svg", func(w http.ResponseWriter, r *http.Request) {
 		file, _ := assets.ReadFile("assets/favicon.svg")
 		w.Header().Set("Content-Type", "image/svg+xml")
@@ -34,6 +37,8 @@ func main() {
 		if query == "/reload" {
 			config, _ = internal.LoadConfig()
 			redirectUrl = "/"
+		} else if query == "/help" {
+			redirectUrl = "/help"
 		} else if IsUrl(query) {
 			redirectUrl = query
 		} else if url, exists := config.Redirects[query]; exists {

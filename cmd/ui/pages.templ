@@ -1,85 +1,225 @@
 package ui
 
-import "github.com/dector/startpage/internal"
+import (
+	"github.com/dector/startpage/internal"
+	"sort"
+)
 
-templ IndexPage(cfg internal.Config) {
-	<!doctype html>
+func sortedKeys(m map[string]string) []string {
+	keys := make([]string, 0, len(m))
+	for k := range m {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+	return keys
+}
+
+templ HtmlPage(title string, styles templ.Component, cfg internal.Config) {
+	<!DOCTYPE html>
 	<html lang="en">
-	    <head>
-	        <meta charset="UTF-8" />
-	        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-	        <title>Startpage</title>
-	        <style>
+		<head>
+			<meta charset="UTF-8"/>
+			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+			<link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
+			<title>{ title }</title>
+			<style>
 	            body {
-	                background-color: #1f1f1f; /* Dark background */
-	                color: #5f745f; /* Text color */
-	                display: flex;
-	                flex-direction: column;
-	                justify-content: center; /* Horizontal center */
-	                align-items: center; /* Vertical center */
-	                height: 100vh; /* Make body take full viewport height */
-	                margin: 0; /* Remove default body margin */
+	                background-color: #1f1f1f;
+	                color: #d0d0d0;
 	                font-family: "Inter", sans-serif;
-	            }
-	            main {
-	                width: 50%;
-	                margin: 0 auto;
-	                padding: 20px;
-	                background-color: #2f2f2f;
-	                border-radius: 10px;
-	                box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-	            }
-	            #search {
-	                background: transparent;
-	                //border: #5f745f solid 1px;
-	                border: none;
-	                border-radius: 5px;
-	                width: 100%;
-	                color: darkgray;
-	                font-size: 1.5rem;
-	                text-align: center;
-	            }
-				#footer {
-					color: gray;
-					opacity: 0.5;
-					position: absolute;
-					bottom: 0;
-					left: 0;
-					width: 100%;
-					text-align: center;
-					padding: 10px 0;
-				}
-				#footer:hover {
-					opacity: 1;
-				}
-	            :focus {
-	                outline: none;
-	                border-color: none;
-	                box-shadow: none;
-	            }
-	            ::placeholder {
-	                color: #5f745f;
+	                margin: 0;
 	            }
 	        </style>
-	    </head>
-	    <body>
-	        <main>
-	            <!-- <h1>:)</h1> -->
-	            <form method="POST" action="/search">
-	                <input
-	                    id="search"
-	                    type="text"
-	                    name="q"
-	                    placeholder="Search..."
-	                    autofocus
-	                />
-	            </form>
-	        </main>
-	        <div style="text-align: right; margin-top: 20px; font-size: 0.8rem; width: 50%;">
-	            <a href="http://localhost:30101" style="color: gray; text-decoration: none; transition: color 0.3s;" onmouseover="this.style.color='orange'" onmouseout="this.style.color='gray'">Dashboard</a>
-	        </div>
+			if styles != nil {
+				@styles
+			}
+		</head>
+		<body>
+			{ children... }
 			<div id="footer">v { cfg.Version }</div>
-	    </body>
+		</body>
 	</html>
+}
+
+templ IndexPageStyles() {
+	<style>
+	    body {
+	        color: #5f745f;
+	        display: flex;
+	        flex-direction: column;
+	        justify-content: center;
+	        align-items: center;
+	        height: 100vh;
+	    }
+	    main {
+	        width: 50%;
+	        margin: 0 auto;
+	        padding: 20px;
+	        background-color: #2f2f2f;
+	        border-radius: 10px;
+	        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+	    }
+	    #search {
+	        background: transparent;
+	        border: none;
+	        border-radius: 5px;
+	        width: 100%;
+	        color: darkgray;
+	        font-size: 1.5rem;
+	        text-align: center;
+	    }
+	    #footer {
+	        color: gray;
+	        opacity: 0.5;
+	        position: absolute;
+	        bottom: 0;
+	        left: 0;
+	        width: 100%;
+	        text-align: center;
+	        padding: 10px 0;
+	    }
+	    #footer:hover {
+	        opacity: 1;
+	    }
+	    :focus {
+	        outline: none;
+	        border-color: none;
+	        box-shadow: none;
+	    }
+	    ::placeholder {
+	        color: #5f745f;
+	    }
+	</style>
+}
+
+templ IndexPage(cfg internal.Config) {
+	@HtmlPage("Startpage", IndexPageStyles(), cfg) {
+		<main>
+			<form method="POST" action="/search">
+				<input
+					id="search"
+					type="text"
+					name="q"
+					placeholder="Search..."
+					autofocus
+				/>
+			</form>
+		</main>
+		<div style="text-align: right; margin-top: 20px; font-size: 0.8rem; width: 50%;">
+			<a href="http://localhost:30101" style="color: gray; text-decoration: none; transition: color 0.3s;" onmouseover="this.style.color='orange'" onmouseout="this.style.color='gray'">Dashboard</a>
+		</div>
+	}
+}
+
+templ HelpPageStyles() {
+	<style>
+	    body {
+	        line-height: 1.6;
+	        padding: 40px;
+	    }
+	    .container {
+	        max-width: 800px;
+	        margin: 0 auto;
+	        background-color: #2f2f2f;
+	        border-radius: 10px;
+	        padding: 40px;
+	        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+	    }
+	    h1 {
+	        color: #5f745f;
+	        margin-top: 0;
+	        border-bottom: 2px solid #5f745f;
+	        padding-bottom: 10px;
+	    }
+	    h2 {
+	        color: #7f947f;
+	        margin-top: 30px;
+	        margin-bottom: 15px;
+	    }
+	    .command, .redirect {
+	        background-color: #1f1f1f;
+	        padding: 12px 16px;
+	        margin: 8px 0;
+	        border-radius: 5px;
+	        display: flex;
+	        justify-content: space-between;
+	        align-items: center;
+	        border-left: 3px solid #5f745f;
+	    }
+	    .command code, .redirect code {
+	        color: #a0b0a0;
+	        font-family: monospace;
+	        font-size: 1.1em;
+	    }
+	    .description {
+	        color: #888;
+	        font-size: 0.9em;
+	    }
+	    .url {
+	        color: #7f947f;
+	        font-size: 0.9em;
+	        word-break: break-all;
+	    }
+	    a {
+	        color: #7f947f;
+	        text-decoration: none;
+	        transition: color 0.3s;
+	    }
+	    a:hover {
+	        color: #9fb49f;
+	    }
+	    .back-link {
+	        margin-top: 30px;
+	        text-align: center;
+	    }
+	    .empty {
+	        color: #666;
+	        font-style: italic;
+	    }
+	    #footer {
+	        color: gray;
+	        opacity: 0.5;
+	        text-align: center;
+	        padding: 10px 0;
+	        margin-top: 40px;
+	    }
+	    #footer:hover {
+	        opacity: 1;
+	    }
+	</style>
+}
+
+templ HelpPage(cfg internal.Config) {
+	@HtmlPage("StartPage - Help", HelpPageStyles(), cfg) {
+		<div class="container">
+			<h1>Startpage Help</h1>
+			<h2>/-Commands</h2>
+			<div class="command">
+				<div>
+					<code>/reload</code>
+					<div class="description">Reload configuration from config file</div>
+				</div>
+			</div>
+			<div class="command">
+				<div>
+					<code>/help</code>
+					<div class="description">Show this help page</div>
+				</div>
+			</div>
+			<h2>Configured Redirects</h2>
+			if len(cfg.Redirects) == 0 {
+				<div class="empty">No redirects configured</div>
+			} else {
+				for _, shortcut := range sortedKeys(cfg.Redirects) {
+					<div class="redirect">
+						<code>{ shortcut }</code>
+						<div class="url">→ <a href={ templ.URL(cfg.Redirects[shortcut]) } target="_blank">{ cfg.Redirects[shortcut] }</a></div>
+					</div>
+				}
+			}
+			<div class="back-link">
+				<a href="/">← Back to home</a>
+			</div>
+		</div>
+	}
 }

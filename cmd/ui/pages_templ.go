@@ -8,9 +8,21 @@ package ui
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
-import "github.com/dector/startpage/internal"
+import (
+	"github.com/dector/startpage/internal"
+	"sort"
+)
 
-func IndexPage(cfg internal.Config) templ.Component {
+func sortedKeys(m map[string]string) []string {
+	keys := make([]string, 0, len(m))
+	for k := range m {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+	return keys
+}
+
+func HtmlPage(title string, styles templ.Component, cfg internal.Config) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -31,20 +43,259 @@ func IndexPage(cfg internal.Config) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<!doctype html><html lang=\"en\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><link rel=\"icon\" type=\"image/svg+xml\" href=\"/favicon.svg\"><title>Startpage</title><style>\n\t            body {\n\t                background-color: #1f1f1f; /* Dark background */\n\t                color: #5f745f; /* Text color */\n\t                display: flex;\n\t                flex-direction: column;\n\t                justify-content: center; /* Horizontal center */\n\t                align-items: center; /* Vertical center */\n\t                height: 100vh; /* Make body take full viewport height */\n\t                margin: 0; /* Remove default body margin */\n\t                font-family: \"Inter\", sans-serif;\n\t            }\n\t            main {\n\t                width: 50%;\n\t                margin: 0 auto;\n\t                padding: 20px;\n\t                background-color: #2f2f2f;\n\t                border-radius: 10px;\n\t                box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);\n\t            }\n\t            #search {\n\t                background: transparent;\n\t                //border: #5f745f solid 1px;\n\t                border: none;\n\t                border-radius: 5px;\n\t                width: 100%;\n\t                color: darkgray;\n\t                font-size: 1.5rem;\n\t                text-align: center;\n\t            }\n\t\t\t\t#footer {\n\t\t\t\t\tcolor: gray;\n\t\t\t\t\topacity: 0.5;\n\t\t\t\t\tposition: absolute;\n\t\t\t\t\tbottom: 0;\n\t\t\t\t\tleft: 0;\n\t\t\t\t\twidth: 100%;\n\t\t\t\t\ttext-align: center;\n\t\t\t\t\tpadding: 10px 0;\n\t\t\t\t}\n\t\t\t\t#footer:hover {\n\t\t\t\t\topacity: 1;\n\t\t\t\t}\n\t            :focus {\n\t                outline: none;\n\t                border-color: none;\n\t                box-shadow: none;\n\t            }\n\t            ::placeholder {\n\t                color: #5f745f;\n\t            }\n\t        </style></head><body><main><!-- <h1>:)</h1> --><form method=\"POST\" action=\"/search\"><input id=\"search\" type=\"text\" name=\"q\" placeholder=\"Search...\" autofocus></form></main><div style=\"text-align: right; margin-top: 20px; font-size: 0.8rem; width: 50%;\"><a href=\"http://localhost:30101\" style=\"color: gray; text-decoration: none; transition: color 0.3s;\" onmouseover=\"this.style.color='orange'\" onmouseout=\"this.style.color='gray'\">Dashboard</a></div><div id=\"footer\">v ")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<!doctype html><html lang=\"en\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><link rel=\"icon\" type=\"image/svg+xml\" href=\"/favicon.svg\"><title>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var2 string
-		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(cfg.Version)
+		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(title)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `cmd/ui/pages.templ`, Line: 82, Col: 35}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `cmd/ui/pages.templ`, Line: 24, Col: 17}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</div></body></html>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</title><style>\n\t            body {\n\t                background-color: #1f1f1f;\n\t                color: #d0d0d0;\n\t                font-family: \"Inter\", sans-serif;\n\t                margin: 0;\n\t            }\n\t        </style>")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if styles != nil {
+			templ_7745c5c3_Err = styles.Render(ctx, templ_7745c5c3_Buffer)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "</head><body>")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templ_7745c5c3_Var1.Render(ctx, templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "<div id=\"footer\">v ")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var3 string
+		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(cfg.Version)
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `cmd/ui/pages.templ`, Line: 39, Col: 35}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "</div></body></html>")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		return nil
+	})
+}
+
+func IndexPageStyles() templ.Component {
+	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
+		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
+		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
+			return templ_7745c5c3_CtxErr
+		}
+		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
+		if !templ_7745c5c3_IsBuffer {
+			defer func() {
+				templ_7745c5c3_BufErr := templruntime.ReleaseBuffer(templ_7745c5c3_Buffer)
+				if templ_7745c5c3_Err == nil {
+					templ_7745c5c3_Err = templ_7745c5c3_BufErr
+				}
+			}()
+		}
+		ctx = templ.InitializeContext(ctx)
+		templ_7745c5c3_Var4 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var4 == nil {
+			templ_7745c5c3_Var4 = templ.NopComponent
+		}
+		ctx = templ.ClearChildren(ctx)
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "<style>\n\t    body {\n\t        color: #5f745f;\n\t        display: flex;\n\t        flex-direction: column;\n\t        justify-content: center;\n\t        align-items: center;\n\t        height: 100vh;\n\t    }\n\t    main {\n\t        width: 50%;\n\t        margin: 0 auto;\n\t        padding: 20px;\n\t        background-color: #2f2f2f;\n\t        border-radius: 10px;\n\t        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);\n\t    }\n\t    #search {\n\t        background: transparent;\n\t        border: none;\n\t        border-radius: 5px;\n\t        width: 100%;\n\t        color: darkgray;\n\t        font-size: 1.5rem;\n\t        text-align: center;\n\t    }\n\t    #footer {\n\t        color: gray;\n\t        opacity: 0.5;\n\t        position: absolute;\n\t        bottom: 0;\n\t        left: 0;\n\t        width: 100%;\n\t        text-align: center;\n\t        padding: 10px 0;\n\t    }\n\t    #footer:hover {\n\t        opacity: 1;\n\t    }\n\t    :focus {\n\t        outline: none;\n\t        border-color: none;\n\t        box-shadow: none;\n\t    }\n\t    ::placeholder {\n\t        color: #5f745f;\n\t    }\n\t</style>")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		return nil
+	})
+}
+
+func IndexPage(cfg internal.Config) templ.Component {
+	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
+		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
+		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
+			return templ_7745c5c3_CtxErr
+		}
+		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
+		if !templ_7745c5c3_IsBuffer {
+			defer func() {
+				templ_7745c5c3_BufErr := templruntime.ReleaseBuffer(templ_7745c5c3_Buffer)
+				if templ_7745c5c3_Err == nil {
+					templ_7745c5c3_Err = templ_7745c5c3_BufErr
+				}
+			}()
+		}
+		ctx = templ.InitializeContext(ctx)
+		templ_7745c5c3_Var5 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var5 == nil {
+			templ_7745c5c3_Var5 = templ.NopComponent
+		}
+		ctx = templ.ClearChildren(ctx)
+		templ_7745c5c3_Var6 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
+			templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
+			templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
+			if !templ_7745c5c3_IsBuffer {
+				defer func() {
+					templ_7745c5c3_BufErr := templruntime.ReleaseBuffer(templ_7745c5c3_Buffer)
+					if templ_7745c5c3_Err == nil {
+						templ_7745c5c3_Err = templ_7745c5c3_BufErr
+					}
+				}()
+			}
+			ctx = templ.InitializeContext(ctx)
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "<main><form method=\"POST\" action=\"/search\"><input id=\"search\" type=\"text\" name=\"q\" placeholder=\"Search...\" autofocus></form></main><div style=\"text-align: right; margin-top: 20px; font-size: 0.8rem; width: 50%;\"><a href=\"http://localhost:30101\" style=\"color: gray; text-decoration: none; transition: color 0.3s;\" onmouseover=\"this.style.color='orange'\" onmouseout=\"this.style.color='gray'\">Dashboard</a></div>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			return nil
+		})
+		templ_7745c5c3_Err = HtmlPage("Startpage", IndexPageStyles(), cfg).Render(templ.WithChildren(ctx, templ_7745c5c3_Var6), templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		return nil
+	})
+}
+
+func HelpPageStyles() templ.Component {
+	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
+		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
+		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
+			return templ_7745c5c3_CtxErr
+		}
+		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
+		if !templ_7745c5c3_IsBuffer {
+			defer func() {
+				templ_7745c5c3_BufErr := templruntime.ReleaseBuffer(templ_7745c5c3_Buffer)
+				if templ_7745c5c3_Err == nil {
+					templ_7745c5c3_Err = templ_7745c5c3_BufErr
+				}
+			}()
+		}
+		ctx = templ.InitializeContext(ctx)
+		templ_7745c5c3_Var7 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var7 == nil {
+			templ_7745c5c3_Var7 = templ.NopComponent
+		}
+		ctx = templ.ClearChildren(ctx)
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "<style>\n\t    body {\n\t        line-height: 1.6;\n\t        padding: 40px;\n\t    }\n\t    .container {\n\t        max-width: 800px;\n\t        margin: 0 auto;\n\t        background-color: #2f2f2f;\n\t        border-radius: 10px;\n\t        padding: 40px;\n\t        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);\n\t    }\n\t    h1 {\n\t        color: #5f745f;\n\t        margin-top: 0;\n\t        border-bottom: 2px solid #5f745f;\n\t        padding-bottom: 10px;\n\t    }\n\t    h2 {\n\t        color: #7f947f;\n\t        margin-top: 30px;\n\t        margin-bottom: 15px;\n\t    }\n\t    .command, .redirect {\n\t        background-color: #1f1f1f;\n\t        padding: 12px 16px;\n\t        margin: 8px 0;\n\t        border-radius: 5px;\n\t        display: flex;\n\t        justify-content: space-between;\n\t        align-items: center;\n\t        border-left: 3px solid #5f745f;\n\t    }\n\t    .command code, .redirect code {\n\t        color: #a0b0a0;\n\t        font-family: monospace;\n\t        font-size: 1.1em;\n\t    }\n\t    .description {\n\t        color: #888;\n\t        font-size: 0.9em;\n\t    }\n\t    .url {\n\t        color: #7f947f;\n\t        font-size: 0.9em;\n\t        word-break: break-all;\n\t    }\n\t    a {\n\t        color: #7f947f;\n\t        text-decoration: none;\n\t        transition: color 0.3s;\n\t    }\n\t    a:hover {\n\t        color: #9fb49f;\n\t    }\n\t    .back-link {\n\t        margin-top: 30px;\n\t        text-align: center;\n\t    }\n\t    .empty {\n\t        color: #666;\n\t        font-style: italic;\n\t    }\n\t    #footer {\n\t        color: gray;\n\t        opacity: 0.5;\n\t        text-align: center;\n\t        padding: 10px 0;\n\t        margin-top: 40px;\n\t    }\n\t    #footer:hover {\n\t        opacity: 1;\n\t    }\n\t</style>")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		return nil
+	})
+}
+
+func HelpPage(cfg internal.Config) templ.Component {
+	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
+		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
+		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
+			return templ_7745c5c3_CtxErr
+		}
+		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
+		if !templ_7745c5c3_IsBuffer {
+			defer func() {
+				templ_7745c5c3_BufErr := templruntime.ReleaseBuffer(templ_7745c5c3_Buffer)
+				if templ_7745c5c3_Err == nil {
+					templ_7745c5c3_Err = templ_7745c5c3_BufErr
+				}
+			}()
+		}
+		ctx = templ.InitializeContext(ctx)
+		templ_7745c5c3_Var8 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var8 == nil {
+			templ_7745c5c3_Var8 = templ.NopComponent
+		}
+		ctx = templ.ClearChildren(ctx)
+		templ_7745c5c3_Var9 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
+			templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
+			templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
+			if !templ_7745c5c3_IsBuffer {
+				defer func() {
+					templ_7745c5c3_BufErr := templruntime.ReleaseBuffer(templ_7745c5c3_Buffer)
+					if templ_7745c5c3_Err == nil {
+						templ_7745c5c3_Err = templ_7745c5c3_BufErr
+					}
+				}()
+			}
+			ctx = templ.InitializeContext(ctx)
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "<div class=\"container\"><h1>Startpage Help</h1><h2>/-Commands</h2><div class=\"command\"><div><code>/reload</code><div class=\"description\">Reload configuration from config file</div></div></div><div class=\"command\"><div><code>/help</code><div class=\"description\">Show this help page</div></div></div><h2>Configured Redirects</h2>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			if len(cfg.Redirects) == 0 {
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 10, "<div class=\"empty\">No redirects configured</div>")
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+			} else {
+				for _, shortcut := range sortedKeys(cfg.Redirects) {
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 11, "<div class=\"redirect\"><code>")
+					if templ_7745c5c3_Err != nil {
+						return templ_7745c5c3_Err
+					}
+					var templ_7745c5c3_Var10 string
+					templ_7745c5c3_Var10, templ_7745c5c3_Err = templ.JoinStringErrs(shortcut)
+					if templ_7745c5c3_Err != nil {
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `cmd/ui/pages.templ`, Line: 215, Col: 22}
+					}
+					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var10))
+					if templ_7745c5c3_Err != nil {
+						return templ_7745c5c3_Err
+					}
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 12, "</code><div class=\"url\">→ <a href=\"")
+					if templ_7745c5c3_Err != nil {
+						return templ_7745c5c3_Err
+					}
+					var templ_7745c5c3_Var11 templ.SafeURL
+					templ_7745c5c3_Var11, templ_7745c5c3_Err = templ.JoinURLErrs(templ.URL(cfg.Redirects[shortcut]))
+					if templ_7745c5c3_Err != nil {
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `cmd/ui/pages.templ`, Line: 216, Col: 71}
+					}
+					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var11))
+					if templ_7745c5c3_Err != nil {
+						return templ_7745c5c3_Err
+					}
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 13, "\" target=\"_blank\">")
+					if templ_7745c5c3_Err != nil {
+						return templ_7745c5c3_Err
+					}
+					var templ_7745c5c3_Var12 string
+					templ_7745c5c3_Var12, templ_7745c5c3_Err = templ.JoinStringErrs(cfg.Redirects[shortcut])
+					if templ_7745c5c3_Err != nil {
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `cmd/ui/pages.templ`, Line: 216, Col: 115}
+					}
+					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var12))
+					if templ_7745c5c3_Err != nil {
+						return templ_7745c5c3_Err
+					}
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 14, "</a></div></div>")
+					if templ_7745c5c3_Err != nil {
+						return templ_7745c5c3_Err
+					}
+				}
+			}
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 15, "<div class=\"back-link\"><a href=\"/\">← Back to home</a></div></div>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			return nil
+		})
+		templ_7745c5c3_Err = HtmlPage("StartPage - Help", HelpPageStyles(), cfg).Render(templ.WithChildren(ctx, templ_7745c5c3_Var9), templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
