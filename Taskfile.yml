@@ -7,23 +7,7 @@ tasks:
   default:
     cmds:
       - task --list-all
-  gen:
-    cmds:
-      - go tool templ generate
-  dev:
-    env:
-      DEV: 1
-    cmds:
-      - |
-        go tool templ generate --watch \
-          --open-browser=false \
-          --proxy="http://localhost:1110" --proxyport=1112 \
-          --cmd="go run cmd/main.go"
-    silent: true
-  build:
-    cmds:
-      - go build -o bin/startpage cmd/main.go
-    silent: true
+
   deploy:
     deps:
       - build

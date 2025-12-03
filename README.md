@@ -13,9 +13,10 @@ Startpage serves as a custom browser homepage with intelligent search routing:
 
 ### Prerequisites
 
-- Go 1.23.0 or later
+- Go 1.25.0 or later
 - [templ](https://templ.guide/) (for template generation)
-- [Taskfile](https://taskfile.dev/)
+- [ROR](https://github.com/dector/ror) - for builds
+- [Taskfile](https://taskfile.dev/) - for deploy (will be removed)
 
 ### TL;DR Init
 
@@ -30,7 +31,7 @@ and open [localhost:1111](http://localhost:1111) in the browser.
 ### Building
 
 ```bash
-task build
+ror build
 ```
 
 ### Configuration
@@ -45,10 +46,8 @@ redirects {
 }
 ```
 
-Or use sample config:
-
 ```bash
-task build:config
+task deploy:config
 ```
 
 See full [config.kdl example](./assets/sample.config.kdl)
@@ -108,7 +107,7 @@ systemctl --user disable startpage
 go get -tool github.com/a-h/templ/cmd/templ@latest
 
 # Run in development mode with hot reload
-task dev
+ror dev
 ```
 
 This will start the application with automatic template regeneration and reload on port 1112 (proxying to port 1110).
@@ -118,4 +117,4 @@ This will start the application with automatic template regeneration and reload 
 1. Set your browser's homepage to `http://localhost:1111` (or your configured port)
 2. Type shortcuts (e.g., `mail`, `yt`) to navigate to configured URLs
 3. Type full URLs to navigate directly
-4. Type anything else to search on Google
+4. Type anything else to search on search engine

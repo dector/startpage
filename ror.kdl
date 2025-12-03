@@ -1,0 +1,21 @@
+task gen {
+  description "Generate templ templates"
+
+  cmd "go tool templ generate"
+}
+
+task dev {
+  description "Run development server with hot reload"
+
+  cmd #"DEV=1 go tool templ generate --watch --open-browser=false --proxy="%%proxy-url%%" --proxyport=%%proxy-port%% --cmd="%%command%%""# {
+    where proxy-url="http://localhost:1110"
+    where proxy-port=1112
+    where command="go run cmd/main.go"
+  }
+}
+
+task build {
+  description "Build the application binary"
+
+  cmd "go build -o bin/startpage cmd/main.go"
+}
