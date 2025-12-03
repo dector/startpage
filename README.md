@@ -6,7 +6,7 @@
 Startpage serves as a custom browser homepage with intelligent search routing:
 - Enter full URLs to navigate directly to them
 - Use custom shortcuts (e.g., `mail` -> Gmail, `yt` -> YouTube)
-- Automatically fallback to Google search for unrecognized queries
+- Configurable search engine for unrecognized queries (defaults to Startpage.com)
 - Lightweight and fast with minimal dependencies
 
 ## Setup
@@ -36,15 +36,19 @@ ror build
 
 ### Configuration
 
-Create a config file at `~/.config/startpage/config.kdl` to define your custom shortcuts:
+Create a config file at `~/.config/startpage/config.kdl` to configure your search engine and custom shortcuts:
 
 ```kdl
+search-engine "https://www.startpage.com/do/dsearch?q=%%query%%"
+
 redirects {
   - mail="https://gmail.com"
   - yt="https://youtube.com"
   - gh="https://github.com"
 }
 ```
+
+The `search-engine` parameter accepts a URL template where `%%query%%` will be replaced with your search query. If not specified, it defaults to Startpage.com.
 
 ```bash
 task deploy:config
@@ -117,4 +121,4 @@ This will start the application with automatic template regeneration and reload 
 1. Set your browser's homepage to `http://localhost:1111` (or your configured port)
 2. Type shortcuts (e.g., `mail`, `yt`) to navigate to configured URLs
 3. Type full URLs to navigate directly
-4. Type anything else to search on search engine
+4. Type anything else to search using your configured search engine

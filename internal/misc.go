@@ -9,21 +9,27 @@ import (
 )
 
 type Config struct {
-	Version   string
-	Redirects map[string]string
+	Version      string
+	SearchEngine string
+	Redirects    map[string]string
 }
 
 type ExternalConfig struct {
-	Redirects map[string]string
+	SearchEngine string
+	Redirects    map[string]string
 }
 
 func LoadConfig() (*Config, error) {
 	config := &Config{
-		Version: "1.2.1",
+		Version:      "1.2.1",
+		SearchEngine: "https://www.startpage.com/do/dsearch?q=%%query%%",
 	}
 
 	ext := LoadExternalConfig()
 	config.Redirects = ext.Redirects
+	if ext.SearchEngine != "" {
+		config.SearchEngine = ext.SearchEngine
+	}
 
 	return config, nil
 }
@@ -65,9 +71,14 @@ func LoadExternalConfig() ExternalConfig {
 		return config
 	}
 
-	// Find the "redirects" node
+	// Parse configuration nodes
 	for _, node := range doc.Nodes {
-		if node.Name == "redirects" {
+		if node.Name == "search-engine" {
+			// Get the search engine URL from the first argument
+			if len(node.Arguments) > 0 {
+				config.SearchEngine = node.Arguments[0].Value
+			}
+		} else if node.Name == "redirects" {
 			// Parse children nodes as key-value pairs
 			for _, child := range node.Children {
 				if child.Name != "-" {
@@ -78,7 +89,6 @@ func LoadExternalConfig() ExternalConfig {
 					config.Redirects[arg.Key] = arg.Value.Value
 				}
 			}
-			break
 		}
 	}
 

@@ -44,8 +44,7 @@ func main() {
 		} else if url, exists := config.Redirects[query]; exists {
 			redirectUrl = url
 		} else {
-			//redirectUrl = "https://www.google.com/search?q=" + query
-			redirectUrl = "https://www.startpage.com/do/dsearch?q=" + query
+			redirectUrl = strings.ReplaceAll(config.SearchEngine, "%%query%%", query)
 		}
 
 		w.Header().Set("Referrer-Policy", "no-referrer")

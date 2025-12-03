@@ -1,3 +1,5 @@
+search-engine "https://www.startpage.com/do/dsearch?q=%%query%%"
+
 redirects {
   - mail="https://gmail.com"
   - gmail="https://gmail.com"
