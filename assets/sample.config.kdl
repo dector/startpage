@@ -1,0 +1,10 @@
+redirects {
+  - mail="https://gmail.com"
+  - gmail="https://gmail.com"
+  - chat="https://chatgpt.com"
+  - chatc="https://claude.ai"
+  - claude="https://claude.ai"
+  - yt="https://youtube.com"
+  - steam="https://store.steampowered.com"
+  - maps="https://maps.google.com"
+}

@@ -5,7 +5,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"gopkg.in/yaml.v2"
+	"github.com/dector/kdly"
 )
 
 type Config struct {
@@ -14,12 +14,12 @@ type Config struct {
 }
 
 type ExternalConfig struct {
-	Redirects map[string]string `yaml:"redirects"`
+	Redirects map[string]string
 }
 
 func LoadConfig() (*Config, error) {
 	config := &Config{
-		Version: "1.1.1",
+		Version: "1.2.1",
 	}
 
 	ext := LoadExternalConfig()
@@ -31,12 +31,14 @@ func LoadConfig() (*Config, error) {
 func getDefaultConfig() *Config {
 	return &Config{
 		Version:   "1.1.1",
-		Redirects: getDefaultRedirects(),
+		Redirects: map[string]string{},
 	}
 }
 
 func LoadExternalConfig() ExternalConfig {
-	config := ExternalConfig{}
+	config := ExternalConfig{
+		Redirects: make(map[string]string),
+	}
 
 	homeDir, err := os.UserHomeDir()
 	if err != nil {
@@ -44,7 +46,7 @@ func LoadExternalConfig() ExternalConfig {
 		return config
 	}
 
-	configPath := filepath.Join(homeDir, ".config", "startpage", "config.yml")
+	configPath := filepath.Join(homeDir, ".config", "startpage", "config.kdl")
 
 	if _, err := os.Stat(configPath); os.IsNotExist(err) {
 		fmt.Println("Config file not found")
@@ -57,23 +59,28 @@ func LoadExternalConfig() ExternalConfig {
 		return config
 	}
 
-	var ext ExternalConfig
-	err = yaml.Unmarshal(data, &ext)
+	doc, err := kdly.Parse(string(data))
 	if err != nil {
 		fmt.Println("Error parsing config file:", err)
 		return config
 	}
 
-	return ext
-}
+	// Find the "redirects" node
+	for _, node := range doc.Nodes {
+		if node.Name == "redirects" {
+			// Parse children nodes as key-value pairs
+			for _, child := range node.Children {
+				if child.Name != "-" {
+					continue
+				}
 
-func getDefaultRedirects() map[string]string {
-	return map[string]string{
-		"mail":   "https://gmail.com",
-		"gmail":  "https://gmail.com",
-		"chat":   "https://chatgpt.com",
-		"chatc":  "https://claude.ai",
-		"claude": "https://claude.ai",
-		"yt":     "https://youtube.com",
+				for _, arg := range child.Properties {
+					config.Redirects[arg.Key] = arg.Value.Value
+				}
+			}
+			break
+		}
 	}
+
+	return config
 }

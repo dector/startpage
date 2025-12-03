@@ -35,14 +35,23 @@ task build
 
 ### Configuration
 
-Create a config file at `~/.config/startpage/config.yml` to define your custom shortcuts.
+Create a config file at `~/.config/startpage/config.kdl` to define your custom shortcuts:
+
+```kdl
+redirects {
+  - mail="https://gmail.com"
+  - yt="https://youtube.com"
+  - gh="https://github.com"
+}
+```
+
 Or use sample config:
 
 ```bash
 task build:config
 ```
 
-[config.yml example](./assets/sample.config.yml)
+See full [config.kdl example](./assets/sample.config.kdl)
 
 ### Port Configuration
 

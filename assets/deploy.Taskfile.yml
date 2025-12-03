@@ -6,8 +6,8 @@ tasks:
     cmds:
       - |
         CONFIG_DIR="$HOME/.config/startpage"
-        CONFIG_FILE="$CONFIG_DIR/config.yml"
-        SAMPLE_CONFIG="./assets/sample.config.yml"
+        CONFIG_FILE="$CONFIG_DIR/config.kdl"
+        SAMPLE_CONFIG="./assets/sample.config.kdl"
 
         # Check if config exists
         if [ -f "$CONFIG_FILE" ]; then

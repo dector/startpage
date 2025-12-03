@@ -5,4 +5,4 @@
 bin/
 tmp/
 
-/config.yml
+/config.kdl

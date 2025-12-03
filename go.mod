@@ -1,12 +1,10 @@
 module github.com/dector/startpage
 
-go 1.23.0
-
-toolchain go1.24.1
+go 1.25.4
 
 require (
 	github.com/a-h/templ v0.3.960
-	gopkg.in/yaml.v2 v2.4.0
+	github.com/dector/kdly v0.0.0-20251130231056-5b5a81e522eb
 )
 
 require (
