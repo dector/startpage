@@ -9,9 +9,8 @@ tasks:
       - task --list-all
 
   deploy:
-    deps:
-      - build
     cmds:
+      - ror build
       - task: deploy:config
       - task: deploy:service
     silent: true
